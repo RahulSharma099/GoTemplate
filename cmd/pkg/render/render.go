@@ -9,7 +9,7 @@ import (
 	"path/filepath"
 
 	"github.com/RahulSharma099/hello-world/cmd/pkg/config"
-	"github.com/RahulSharma099/hello-world/cmd/pkg/handlers"
+	"github.com/RahulSharma099/hello-world/cmd/pkg/models"
 )
 
 var functions = template.FuncMap{}
@@ -21,7 +21,13 @@ func NewTemplates(a *config.AppConfig) {
 	app = a
 }
 
-func RenderTemplate(w http.ResponseWriter, tmpl string, td *handlers.TemplateData) {
+// TODO: currently working on this
+// FIXME: This function should be used to send repetating data to all the templates
+func AddDefaultData(td *models.TemplateData) *models.TemplateData {
+	return td
+}
+
+func RenderTemplate(w http.ResponseWriter, tmpl string, td *models.TemplateData) {
 
 	var tc map[string]*template.Template
 	if app.UseCache {
@@ -38,7 +44,9 @@ func RenderTemplate(w http.ResponseWriter, tmpl string, td *handlers.TemplateDat
 
 	buf := new(bytes.Buffer)
 
-	_ = t.Execute(buf, nil)
+	td = AddDefaultData(td)
+
+	_ = t.Execute(buf, td)
 
 	_, erro := buf.WriteTo(w)
 	if erro != nil {

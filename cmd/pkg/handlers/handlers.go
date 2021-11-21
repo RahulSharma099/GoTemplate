@@ -4,20 +4,9 @@ import (
 	"net/http"
 
 	"github.com/RahulSharma099/hello-world/cmd/pkg/config"
+	"github.com/RahulSharma099/hello-world/cmd/pkg/models"
 	"github.com/RahulSharma099/hello-world/cmd/pkg/render"
 )
-
-//TODO: TemplateData holds data sent from handlers to templates
-type TemplateData struct {
-	StringMap map[string]string
-	IntMap    map[string]int
-	FloatMap  map[string]float32
-	Data      map[string]interface{}
-	CSRFToken string
-	Flash     string
-	Warning   string
-	Error     string
-}
 
 //Repo is the repository used by handlers
 var Repo *Repository
@@ -40,15 +29,18 @@ func NewHandlers(r *Repository) {
 
 //Home is the home page handler
 func (m *Repository) Home(w http.ResponseWriter, r *http.Request) {
-	render.RenderTemplate(w, "home.page.html", &TemplateData{})
+	render.RenderTemplate(w, "home.page.html", &models.TemplateData{})
 }
 
 //About is the about page handler
 func (m *Repository) About(w http.ResponseWriter, r *http.Request) {
 	//perform some logic\
 	stringMap := make(map[string]string)
+	stringMap["test"] = "Hello, again!!"
 
 	//send some data to the template
 
-	render.RenderTemplate(w, "about.page.html", &TemplateData{})
+	render.RenderTemplate(w, "about.page.html", &models.TemplateData{
+		StringMap: stringMap,
+	})
 }
